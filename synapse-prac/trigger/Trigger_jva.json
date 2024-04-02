@@ -1,0 +1,25 @@
+{
+	"name": "Trigger_jva",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_copy_authenticom",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Hour",
+				"interval": 24,
+				"startTime": "2024-04-02T11:38:00Z",
+				"endTime": "2024-04-17T11:38:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
