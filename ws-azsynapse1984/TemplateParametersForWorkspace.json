@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "ws-azsynapse1984"
+		},
+		"ws-azsynapse1984-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:ws-azsynapse1984.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"ws-azsynapse1984-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://myadlsaccount1984sa.dfs.core.windows.net"
+		}
+	}
+}
