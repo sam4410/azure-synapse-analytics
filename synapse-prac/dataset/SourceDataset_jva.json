@@ -2,7 +2,7 @@
 	"name": "SourceDataset_jva",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_az_sql_db_src",
+			"referenceName": "conn_az_sql_db_src",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
