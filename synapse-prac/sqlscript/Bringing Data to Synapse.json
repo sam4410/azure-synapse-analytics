@@ -1,0 +1,17 @@
+{
+	"name": "Bringing Data to Synapse",
+	"properties": {
+		"content": {
+			"query": "/*\nThere are several options to bring in data into Synapse. These are:\n1. Using Synapse pipelines to import data\n2. Using Azure Data Factory to import data\n3. Using SQL Server Integration Services (SSIS) to import data\n4. Using a COPY statement to import data\n*/\n\n-- Create DimEmployee Table\nCREATE TABLE [dbo].[DimEmployee]\n(\n    [EmployeeKey] [int]  NOT NULL,\n    [ParentEmployeeKey] [int] NULL,\n    [EmployeeNationalIDAlternateKey] [nvarchar](15) NULL,\n    [ParentEmployeeNationalIDAlternateKey] [nvarchar](15) NULL,\n    [SalesTerritoryKey] [int] NULL,\n    [FirstName] [nvarchar](50) NOT NULL,\n    [LastName] [nvarchar](50) NOT NULL,\n    [MiddleName] [nvarchar](50) NULL,\n    [NameStyle] [bit] NOT NULL,\n    [Title] [nvarchar](50) NULL,\n    [HireDate] [date] NULL,\n    [BirthDate] [date] NULL,\n    [LoginID] [nvarchar](256) NULL,\n    [EmailAddress] [nvarchar](50) NULL,\n    [Phone] [nvarchar](25) NULL,\n    [MaritalStatus] [nchar](1) NULL,\n    [EmergencyContactName] [nvarchar](50) NULL,\n    [EmergencyContactPhone] [nvarchar](25) NULL,\n    [SalariedFlag] [bit] NULL,\n    [Gender] [nchar](1) NULL,\n    [PayFrequency] [tinyint] NULL,\n    [BaseRate] [money] NULL,\n    [VacationHours] [smallint] NULL,\n    [SickLeaveHours] [smallint] NULL,\n    [CurrentFlag] [bit] NOT NULL,\n    [SalesPersonFlag] [bit] NOT NULL,\n    [DepartmentName] [nvarchar](50) NULL,\n    [StartDate] [date] NULL,\n    [EndDate] [date] NULL,\n    [Status] [nvarchar](50) NULL\n)\nGO\n\n-- Create UserData Table\nCREATE TABLE UserData (\n  registration_dttm datetime,\n  id int,\n  first_name varchar(200),\n  last_name varchar(200),\n  email varchar(200),\n  gender varchar(20),\n  ip_address varchar(200),\n  cc varchar(200),\n  country varchar(200),\n  birthdate varchar(200),\n  salary decimal,\n  title varchar(200),\n  comments varchar(1000)\n)",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "synapsesqlpool84",
+				"poolName": "synapsesqlpool84"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
