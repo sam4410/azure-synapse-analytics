@@ -4,7 +4,14 @@
 		"description": "trgigger for running pipeline copying zipped file from adls gen 2 to azure synapse sql pool table UserData1",
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [],
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pl_copy_adlsgen2_to_synapse",
+					"type": "PipelineReference"
+				}
+			}
+		],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {
