@@ -2,7 +2,7 @@
 	"name": "ds_staging_delimited",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_adls_acct_synapse_authenticom",
+			"referenceName": "ws-azsynapse1984-WorkspaceDefaultStorage",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
