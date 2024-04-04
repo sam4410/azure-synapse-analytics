@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"folderPath": " demozipfiles-ch04",
 				"fileSystem": "synapse-exercises"
 			},
 			"columnDelimiter": ",",
