@@ -2,7 +2,7 @@
 	"name": "synapse pipelines to orchestrate data",
 	"properties": {
 		"content": {
-			"query": "-- Creating user table\nCREATE TABLE UserData1 (\n  UserID INT,\n  Name VARCHAR(200),\n  EmailID VARCHAR(200),\n  State VARCHAR(50),\n  City VARCHAR(50)\n);\n",
+			"query": "-- Creating user table\nCREATE TABLE UserData1 (\n  UserID INT,\n  Name VARCHAR(200),\n  EmailID VARCHAR(200),\n  State VARCHAR(50),\n  City VARCHAR(50)\n);\n\n-- validating presence of data after copying it from zipped files in ADLS to synapse SQL pool\nselect * from dbo.UserData1\n",
 			"metadata": {
 				"language": "sql"
 			},
