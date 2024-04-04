@@ -1,0 +1,105 @@
+{
+	"name": "SynapseLinkCosmosDB",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sparkpoolprac84",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "491c6b58-a893-4ac6-90b5-161c601c44c6"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "python"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/acdf152f-3867-4db8-9da5-81dfde654c21/resourceGroups/rg-dev-revenue-practice/providers/Microsoft.Synapse/workspaces/ws-azsynapse1984/bigDataPools/sparkpoolprac84",
+				"name": "sparkpoolprac84",
+				"type": "Spark",
+				"endpoint": "https://ws-azsynapse1984.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpoolprac84",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.4",
+				"nodeCount": 3,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"# Loading Cosmos DB data to a Spark DataFrame without impacting the transactional store\r\n",
+					"df = spark.read.format(\"cosmos.olap\")\\\r\n",
+					"    .option(\"spark.synapse.linkedService\", \"CosmosDbNoSql1\")\\\r\n",
+					"    .option(\"spark.cosmos.container\", \"Products\")\\\r\n",
+					"    .load()"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"```\r\n",
+					"# To select a preferred list of regions in a multi-region Azure Cosmos DB account, add \r\n",
+					".option(\"spark.cosmos.preferredRegions\", \r\n",
+					"\"<Region1>,<Region2>\")\r\n",
+					"```"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"#  Write a Spark DataFrame into an Azure Cosmos DB container\r\n",
+					"DataFrameName.write.format(\"cosmos.oltp\")\\\r\n",
+					"    .option(\"spark.synapse.linkedService\", \"CosmosDbNoSql1\")\\\r\n",
+					"    .option(\"spark.cosmos.container\", \"Products\")\\\r\n",
+					"    .option(\"spark.cosmos.write.upsertEnabled\", \"true\")\\\r\n",
+					"    .mode('append')\\\r\n",
+					"    .save()"
+				],
+				"execution_count": null
+			}
+		]
+	}
+}
