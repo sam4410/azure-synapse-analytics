@@ -1,0 +1,17 @@
+{
+	"name": "synapse pipelines to orchestrate data",
+	"properties": {
+		"content": {
+			"query": "-- Creating user table\nCREATE TABLE UserData1 (\n  UserID INT,\n  Name VARCHAR(200),\n  EmailID VARCHAR(200),\n  State VARCHAR(50),\n  City VARCHAR(50)\n);\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "synapsesqlpool84",
+				"poolName": "synapsesqlpool84"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
