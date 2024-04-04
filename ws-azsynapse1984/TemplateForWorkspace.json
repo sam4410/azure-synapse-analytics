@@ -566,8 +566,7 @@
 						"frequency": "Day",
 						"interval": 1,
 						"startTime": "2024-04-04T06:37:00",
-						"timeZone": "India Standard Time",
-						"schedule": {}
+						"timeZone": "India Standard Time"
 					}
 				}
 			},
@@ -650,7 +649,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "-- Creating user table\nCREATE TABLE UserData1 (\n  UserID INT,\n  Name VARCHAR(200),\n  EmailID VARCHAR(200),\n  State VARCHAR(50),\n  City VARCHAR(50)\n);\n",
+					"query": "-- Creating user table\nCREATE TABLE UserData1 (\n  UserID INT,\n  Name VARCHAR(200),\n  EmailID VARCHAR(200),\n  State VARCHAR(50),\n  City VARCHAR(50)\n);\n\n-- validating presence of data after copying it from zipped files in ADLS to synapse SQL pool\nselect * from dbo.UserData1\n",
 					"metadata": {
 						"language": "sql"
 					},
