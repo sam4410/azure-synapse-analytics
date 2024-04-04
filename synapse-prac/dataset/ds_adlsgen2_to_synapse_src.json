@@ -1,0 +1,23 @@
+{
+	"name": "ds_adlsgen2_to_synapse_src",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls_to_synapse_src",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "synapse-exercises"
+			},
+			"columnDelimiter": ",",
+			"compressionCodec": "ZipDeflate",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
