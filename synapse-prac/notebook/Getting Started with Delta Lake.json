@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "5949a04a-f8b5-4b35-bfc4-0cc51e9ee06c"
+				"spark.autotune.trackingId": "a69c6b73-7a84-4bb4-94d8-2bba042474d0"
 			}
 		},
 		"metadata": {
@@ -84,7 +84,7 @@
 					"\n",
 					"delta_table_path"
 				],
-				"execution_count": 29
+				"execution_count": 36
 			},
 			{
 				"cell_type": "markdown",
@@ -102,7 +102,7 @@
 					"data.show()\n",
 					"data.write.format(\"delta\").save(delta_table_path)"
 				],
-				"execution_count": 30
+				"execution_count": 37
 			},
 			{
 				"cell_type": "markdown",
@@ -117,7 +117,7 @@
 				"source": [
 					"[log_line.value for log_line in spark.read.text(delta_table_path + \"/_delta_log/\").collect()]"
 				],
-				"execution_count": 31
+				"execution_count": 38
 			},
 			{
 				"cell_type": "markdown",
@@ -133,7 +133,7 @@
 					"df = spark.read.format(\"delta\").load(delta_table_path)\n",
 					"df.show()"
 				],
-				"execution_count": 32
+				"execution_count": 39
 			},
 			{
 				"cell_type": "markdown",
@@ -151,7 +151,7 @@
 					"data.write.format(\"delta\").mode(\"overwrite\").save(delta_table_path)\n",
 					"df.show()"
 				],
-				"execution_count": 33
+				"execution_count": 40
 			},
 			{
 				"cell_type": "markdown",
@@ -164,7 +164,7 @@
 				"source": [
 					"[log_line.value for log_line in spark.read.text(delta_table_path + \"/_delta_log/\").collect()]"
 				],
-				"execution_count": 34
+				"execution_count": 41
 			},
 			{
 				"cell_type": "markdown",
@@ -178,9 +178,9 @@
 				"cell_type": "code",
 				"source": [
 					"# Write data to a new managed catalog table.\n",
-					"data.write.format(\"delta\").saveAsTable(\"ManagedDeltaTable\")"
+					"data.write.format(\"delta\").saveAsTable(\"ManagedDeltaTable1\")"
 				],
-				"execution_count": 35
+				"execution_count": 43
 			},
 			{
 				"cell_type": "code",
@@ -197,10 +197,10 @@
 					"spark.sql(\"SHOW TABLES\").show()\n",
 					"\n",
 					"# Explore their properties.\n",
-					"spark.sql(\"DESCRIBE EXTENDED ManagedDeltaTable\").show(truncate=False)\n",
+					"spark.sql(\"DESCRIBE EXTENDED ManagedDeltaTable1\").show(truncate=False)\n",
 					"spark.sql(\"DESCRIBE EXTENDED ExternalDeltaTable\").show(truncate=False)"
 				],
-				"execution_count": null
+				"execution_count": 44
 			},
 			{
 				"cell_type": "markdown",

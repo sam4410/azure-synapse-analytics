@@ -1,0 +1,40 @@
+{
+	"name": "pl_running_a_notebook",
+	"properties": {
+		"activities": [
+			{
+				"name": "SampleSparkNotebook",
+				"type": "SynapseNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebook": {
+						"referenceName": "Getting Started with Delta Lake",
+						"type": "NotebookReference"
+					},
+					"snapshot": true,
+					"sparkPool": {
+						"referenceName": "sparkpoolprac84",
+						"type": "BigDataPoolReference"
+					},
+					"executorSize": "Small",
+					"conf": {
+						"spark.dynamicAllocation.enabled": true,
+						"spark.dynamicAllocation.minExecutors": 2,
+						"spark.dynamicAllocation.maxExecutors": 8
+					},
+					"driverSize": "Small",
+					"numExecutors": 2
+				}
+			}
+		],
+		"annotations": []
+	}
+}
