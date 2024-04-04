@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSynapseSQLPool'"
 		},
+		"CosmosDbNoSql1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDbNoSql1'"
+		},
 		"ls_adls_to_synapse_src_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adls_to_synapse_src'"
@@ -515,6 +519,25 @@
 				"type": "AzureSqlDW",
 				"typeProperties": {
 					"connectionString": "[parameters('AzureSynapseSQLPool_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/CosmosDbNoSql1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDb",
+				"typeProperties": {
+					"connectionString": "[parameters('CosmosDbNoSql1_connectionString')]"
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
@@ -1202,16 +1225,115 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/synapsesqlpool84')]",
-			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"name": "[concat(parameters('workspaceName'), '/SynapseLinkCosmosDB')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
-				"collation": "SQL_Latin1_General_CP1_CI_AS",
-				"maxSizeBytes": 263882790666240,
-				"annotations": []
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "sparkpoolprac84",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "4f4044bd-378a-4621-8ce9-976392766413"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "python"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/acdf152f-3867-4db8-9da5-81dfde654c21/resourceGroups/rg-dev-revenue-practice/providers/Microsoft.Synapse/workspaces/ws-azsynapse1984/bigDataPools/sparkpoolprac84",
+						"name": "sparkpoolprac84",
+						"type": "Spark",
+						"endpoint": "https://ws-azsynapse1984.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpoolprac84",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.4",
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {},
+						"source": [
+							"# Loading Cosmos DB data to a Spark DataFrame without impacting the transactional store\r\n",
+							"df = spark.read.format(\"cosmos.olap\")\\\r\n",
+							"    .option(\"spark.synapse.linkedService\", \"CosmosDbNoSql1\")\\\r\n",
+							"    .option(\"spark.cosmos.container\", \"Products\")\\\r\n",
+							"    .load()"
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"```\r\n",
+							"# To select a preferred list of regions in a multi-region Azure Cosmos DB account, add \r\n",
+							".option(\"spark.cosmos.preferredRegions\", \r\n",
+							"\"<Region1>,<Region2>\")\r\n",
+							"```"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"#  Write a Spark DataFrame into an Azure Cosmos DB container\r\n",
+							"DataFrameName.write.format(\"cosmos.oltp\")\\\r\n",
+							"    .option(\"spark.synapse.linkedService\", \"CosmosDbNoSql1\")\\\r\n",
+							"    .option(\"spark.cosmos.container\", \"Products\")\\\r\n",
+							"    .option(\"spark.cosmos.write.upsertEnabled\", \"true\")\\\r\n",
+							"    .mode('append')\\\r\n",
+							"    .save()"
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
 			},
-			"dependsOn": [],
-			"location": "eastus2"
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/sparkpoolprac84')]",
@@ -1233,6 +1355,18 @@
 				"sparkVersion": "3.4",
 				"isComputeIsolationEnabled": false,
 				"sessionLevelPackagesEnabled": true,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "eastus2"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/synapsesqlpool84')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
 				"annotations": []
 			},
 			"dependsOn": [],
