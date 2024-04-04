@@ -337,6 +337,55 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/pl_running_a_notebook')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "SampleSparkNotebook",
+						"type": "SynapseNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebook": {
+								"referenceName": "Getting Started with Delta Lake",
+								"type": "NotebookReference"
+							},
+							"snapshot": true,
+							"sparkPool": {
+								"referenceName": "sparkpoolprac84",
+								"type": "BigDataPoolReference"
+							},
+							"executorSize": "Small",
+							"conf": {
+								"spark.dynamicAllocation.enabled": true,
+								"spark.dynamicAllocation.minExecutors": 2,
+								"spark.dynamicAllocation.maxExecutors": 8
+							},
+							"driverSize": "Small",
+							"numExecutors": 2
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/notebooks/Getting Started with Delta Lake')]",
+				"[concat(variables('workspaceId'), '/bigDataPools/sparkpoolprac84')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/ds_adlsgen2_to_synapse_src')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
@@ -684,7 +733,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "7f98a019-f7a2-4723-b396-c063fc012729"
+						"spark.autotune.trackingId": "a69c6b73-7a84-4bb4-94d8-2bba042474d0"
 					}
 				},
 				"metadata": {
@@ -709,15 +758,13 @@
 						"sparkVersion": "3.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"# Hitchhiker's Guide to Delta Lake (Python)\n",
 							"\n",
@@ -737,7 +784,6 @@
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## Configuration\n",
 							"Make sure you modify this as appropriate."
@@ -745,7 +791,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"import random\n",
 							"\n",
@@ -755,11 +800,10 @@
 							"delta_table_path"
 						],
 						"outputs": [],
-						"execution_count": 29
+						"execution_count": 36
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## Create a table\n",
 							"To create a Delta Lake table, write a DataFrame out in the **delta** format. You can use existing Spark SQL code and change the format from parquet, csv, json, and so on, to delta.\n",
@@ -769,18 +813,16 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"data = spark.range(0,5)\n",
 							"data.show()\n",
 							"data.write.format(\"delta\").save(delta_table_path)"
 						],
 						"outputs": [],
-						"execution_count": 30
+						"execution_count": 37
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## Understanding Meta-data\n",
 							"\n",
@@ -789,16 +831,14 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"[log_line.value for log_line in spark.read.text(delta_table_path + \"/_delta_log/\").collect()]"
 						],
 						"outputs": [],
-						"execution_count": 31
+						"execution_count": 38
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## Read data\n",
 							"\n",
@@ -807,17 +847,15 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"df = spark.read.format(\"delta\").load(delta_table_path)\n",
 							"df.show()"
 						],
 						"outputs": [],
-						"execution_count": 32
+						"execution_count": 39
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## Update table data\n",
 							"\n",
@@ -827,34 +865,30 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"data = spark.range(5,10)\n",
 							"data.write.format(\"delta\").mode(\"overwrite\").save(delta_table_path)\n",
 							"df.show()"
 						],
 						"outputs": [],
-						"execution_count": 33
+						"execution_count": 40
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"When you now inspect the meta-data, what you will notice is that the original data is over-written. Well, not in a true sense but appropriate entries are added to Delta's transaction log so it can provide an \"illusion\" that the original data was deleted. We can verify this by re-inspecting the meta-data. You will see several entries indicating reference removal to the original data."
 						]
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"[log_line.value for log_line in spark.read.text(delta_table_path + \"/_delta_log/\").collect()]"
 						],
 						"outputs": [],
-						"execution_count": 34
+						"execution_count": 41
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## Save as catalog tables\n",
 							"\n",
@@ -863,17 +897,15 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"# Write data to a new managed catalog table.\n",
-							"data.write.format(\"delta\").saveAsTable(\"ManagedDeltaTable\")"
+							"data.write.format(\"delta\").saveAsTable(\"ManagedDeltaTable1\")"
 						],
 						"outputs": [],
-						"execution_count": 35
+						"execution_count": 43
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"# Define an external catalog table that points to the existing Delta Lake data in storage.\n",
 							"spark.sql(\"CREATE TABLE ExternalDeltaTable USING DELTA LOCATION '{0}'\".format(delta_table_path))"
@@ -883,21 +915,19 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"# List the 2 new tables.\n",
 							"spark.sql(\"SHOW TABLES\").show()\n",
 							"\n",
 							"# Explore their properties.\n",
-							"spark.sql(\"DESCRIBE EXTENDED ManagedDeltaTable\").show(truncate=False)\n",
+							"spark.sql(\"DESCRIBE EXTENDED ManagedDeltaTable1\").show(truncate=False)\n",
 							"spark.sql(\"DESCRIBE EXTENDED ExternalDeltaTable\").show(truncate=False)"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 44
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## Conditional update without overwrite\n",
 							"\n",
@@ -906,7 +936,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"from delta.tables import *\n",
 							"from pyspark.sql.functions import *\n",
@@ -918,7 +947,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"# Update every even value by adding 100 to it\n",
 							"delta_table.update(\n",
@@ -931,7 +959,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"# Delete every even value\n",
 							"delta_table.delete(\"id % 2 == 0\")\n",
@@ -942,7 +969,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"# Upsert (merge) new data\n",
 							"new_data = spark.range(0,20).alias(\"newData\")\n",
@@ -960,7 +986,6 @@
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## History\n",
 							"Delta's most powerful feature is the ability to allow looking into history i.e., the changes that were made to the underlying Delta Table. The cell below shows how simple it is to inspect the history."
@@ -968,7 +993,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"delta_table.history().show(20, 1000, False)"
 						],
@@ -977,7 +1001,6 @@
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## Read older versions of data using Time Travel\n",
 							"\n",
@@ -988,7 +1011,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"df = spark.read.format(\"delta\").option(\"versionAsOf\", 0).load(delta_table_path)\n",
 							"df.show()"
@@ -998,7 +1020,6 @@
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## Write a stream of data to a table\n",
 							"\n",
@@ -1017,7 +1038,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"streaming_df = spark.readStream.format(\"rate\").load()\n",
 							"stream = streaming_df\\\n",
@@ -1032,7 +1052,6 @@
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## Read a stream of changes from a table\n",
 							"\n",
@@ -1041,7 +1060,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"delta_table.toDF().sort(col(\"id\").desc()).show(100)"
 						],
@@ -1050,7 +1068,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"delta_table.history().drop(\"userId\", \"userName\", \"job\", \"notebook\", \"clusterId\", \"isolationLevel\", \"isBlindAppend\").show(20, 1000, False)"
 						],
@@ -1059,7 +1076,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"stream.stop()"
 						],
@@ -1068,7 +1084,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"delta_table.history().drop(\"userId\", \"userName\", \"job\", \"notebook\", \"clusterId\", \"isolationLevel\", \"isBlindAppend\").show(100, 1000, False)"
 						],
@@ -1077,7 +1092,6 @@
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## Compaction\n",
 							"\n",
@@ -1089,7 +1103,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"partition_count = 2\n",
 							"\n",
@@ -1107,7 +1120,6 @@
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## Convert Parquet to Delta\n",
 							"You can do an in-place conversion from the Parquet format to Delta."
@@ -1115,7 +1127,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"parquet_path = \"/parquet/parquet-table-{0}\".format(session_id)\n",
 							"\n",
@@ -1130,7 +1141,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"DeltaTable.convertToDelta(spark, \"parquet.`{0}`\".format(parquet_path))\n",
 							"\n",
@@ -1142,7 +1152,6 @@
 					},
 					{
 						"cell_type": "markdown",
-						"metadata": {},
 						"source": [
 							"## SQL Support\n",
 							"Delta supports table utility commands through SQL.  You can use SQL to:\n",
@@ -1154,7 +1163,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"spark.sql(\"DESCRIBE HISTORY delta.`{0}`\".format(delta_table_path)).show()"
 						],
@@ -1163,7 +1171,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"spark.sql(\"VACUUM delta.`{0}`\".format(delta_table_path)).show()"
 						],
@@ -1172,7 +1179,6 @@
 					},
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"parquet_id = random.randint(0,1000)\n",
 							"parquet_path = \"/parquet/parquet-table-{0}-{1}\".format(session_id, parquet_path)\n",
@@ -1196,6 +1202,18 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/synapsesqlpool84')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "eastus2"
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/sparkpoolprac84')]",
 			"type": "Microsoft.Synapse/workspaces/bigDataPools",
 			"apiVersion": "2019-06-01-preview",
@@ -1215,18 +1233,6 @@
 				"sparkVersion": "3.4",
 				"isComputeIsolationEnabled": false,
 				"sessionLevelPackagesEnabled": true,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "eastus2"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/synapsesqlpool84')]",
-			"type": "Microsoft.Synapse/workspaces/sqlPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"collation": "SQL_Latin1_General_CP1_CI_AS",
-				"maxSizeBytes": 263882790666240,
 				"annotations": []
 			},
 			"dependsOn": [],
