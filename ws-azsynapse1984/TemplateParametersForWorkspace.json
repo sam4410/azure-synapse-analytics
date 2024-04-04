@@ -11,14 +11,8 @@
 		"conn_az_sql_db_src_connectionString": {
 			"value": ""
 		},
-		"ls_staging_path_accountKey": {
-			"value": ""
-		},
 		"ws-azsynapse1984-WorkspaceDefaultSqlServer_connectionString": {
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:ws-azsynapse1984.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
-		},
-		"ls_staging_path_properties_typeProperties_url": {
-			"value": "https://authenticomvindetailsdl.dfs.core.windows.net/"
 		},
 		"ws-azsynapse1984-WorkspaceDefaultStorage_properties_typeProperties_url": {
 			"value": "https://myadlsaccount1984sa.dfs.core.windows.net"
