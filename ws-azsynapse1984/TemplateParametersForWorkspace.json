@@ -8,9 +8,6 @@
 		"AzureSynapseSQLPool_connectionString": {
 			"value": ""
 		},
-		"conn_az_sql_db_src_connectionString": {
-			"value": ""
-		},
 		"ws-azsynapse1984-WorkspaceDefaultSqlServer_connectionString": {
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:ws-azsynapse1984.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
 		},
