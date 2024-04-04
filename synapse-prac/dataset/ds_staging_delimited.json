@@ -1,9 +1,16 @@
 {
 	"name": "ds_staging_delimited",
 	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ws-azsynapse1984-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation"
+			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
