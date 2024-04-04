@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "trgigger for running pipeline copying zipped file from adls gen 2 to azure synapse sql pool table UserData1",
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
