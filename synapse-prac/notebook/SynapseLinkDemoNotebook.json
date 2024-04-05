@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "3795231f-afd8-4008-aec7-2a9ee33f3a1a"
+				"spark.autotune.trackingId": "e71b29d2-0280-4588-9f47-d1f7d322da9e"
 			}
 		},
 		"metadata": {
@@ -60,6 +60,19 @@
 				"execution_count": 2
 			},
 			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"##### Reading data from storage account"
+				]
+			},
+			{
 				"cell_type": "code",
 				"metadata": {
 					"jupyter": {
@@ -73,9 +86,13 @@
 					}
 				},
 				"source": [
-					""
+					"# Reading data from non primary container (bronze) in primary storage account\r\n",
+					"dfStoreDemoGraphics = (spark.read.csv(\r\n",
+					"    \"/demosynapselink-ch05/StoreDemoGraphics.csv\",\r\n",
+					"    header=True, inferSchema=True\r\n",
+					"))"
 				],
-				"execution_count": null
+				"execution_count": 3
 			}
 		]
 	}
