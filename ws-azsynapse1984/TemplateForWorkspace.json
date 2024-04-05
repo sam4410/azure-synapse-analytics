@@ -1354,7 +1354,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "7a13643f-b959-4b65-a59e-e73f509fccfd"
+						"spark.autotune.trackingId": "1095a457-7b27-41b1-9a4e-2cee1f9df205"
 					}
 				},
 				"metadata": {
@@ -1385,6 +1385,19 @@
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"### Working with \"StoreDemoGraphics\" sample file"
+						]
+					},
 					{
 						"cell_type": "code",
 						"metadata": {},
@@ -1587,7 +1600,7 @@
 							")"
 						],
 						"outputs": [],
-						"execution_count": 29
+						"execution_count": 37
 					},
 					{
 						"cell_type": "code",
@@ -1608,10 +1621,107 @@
 						},
 						"source": [
 							"%%sql\r\n",
-							"drop table if exists sample_table"
+							"select * from sample_table"
 						],
 						"outputs": [],
-						"execution_count": 28
+						"execution_count": 38
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"### Working with \"Products\" sample file"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Reading data from storage account and primary container\r\n",
+							"dfProducts = (spark.read.csv(\r\n",
+							"    \"/demosynapselink-ch05/Products.csv\", header=True, inferSchema=True\r\n",
+							"))"
+						],
+						"outputs": [],
+						"execution_count": 41
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"display(dfProducts)"
+						],
+						"outputs": [],
+						"execution_count": 42
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# Writing data to cosmos DB container\r\n",
+							"dfProducts.write.format(\"cosmos.oltp\")\\\r\n",
+							".option(\"spark.synapse.linkedService\", \"CosmosDbNoSql1\")\\\r\n",
+							".option(\"spark.cosmos.container\", \"Products\")\\\r\n",
+							".option(\"spark.cosmos.write.bulk.enabled\", \"true\").mode(\"append\").save()"
+						],
+						"outputs": [],
+						"execution_count": 43
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							""
+						],
+						"outputs": [],
+						"execution_count": null
 					}
 				]
 			},
