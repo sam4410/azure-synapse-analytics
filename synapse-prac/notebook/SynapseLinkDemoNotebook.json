@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "03976ba2-c58b-4a0d-9c0e-db8b1f4c6099"
+				"spark.autotune.trackingId": "66082560-6a7d-4ff2-ba71-2e8b797bbf1e"
 			}
 		},
 		"metadata": {
@@ -143,9 +143,9 @@
 					"dfStoreDemoGraphics.write.format(\"cosmos.oltp\") \\\r\n",
 					".option(\"spark.synapse.linkedService\", \"CosmosDbNoSql1\")\\\r\n",
 					".option(\"spark.cosmos.container\", \"StoreDemoGraphics\")\\\r\n",
-					".option(\"spark.cosmos.write.upsert\", \"true\").mode(\"append\").save()"
+					".option(\"spark.cosmos.write.upsert.enabled\", \"true\").mode(\"append\").save()"
 				],
-				"execution_count": 7
+				"execution_count": 9
 			},
 			{
 				"cell_type": "code",
