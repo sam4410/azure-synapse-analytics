@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "cd83880d-ae68-4e13-9b07-28f4faa8f3cd"
+				"spark.autotune.trackingId": "a78752a6-3625-4ed7-a3fd-0b4f14188702"
 			}
 		},
 		"metadata": {
@@ -242,7 +242,7 @@
 					"    spark.cosmos.autoSchemaMerge 'true'\r\n",
 					")"
 				],
-				"execution_count": 17
+				"execution_count": 29
 			},
 			{
 				"cell_type": "code",
@@ -265,7 +265,7 @@
 					"%%sql\r\n",
 					"drop table if exists sample_table"
 				],
-				"execution_count": 16
+				"execution_count": 28
 			},
 			{
 				"cell_type": "code",
