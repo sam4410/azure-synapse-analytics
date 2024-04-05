@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "a44280c2-4536-45ab-96c2-f8fd050879b1"
+				"spark.autotune.trackingId": "2def353a-106d-46ac-994a-7ce9de999f7a"
 			}
 		},
 		"metadata": {
@@ -187,6 +187,85 @@
 					"display(df)"
 				],
 				"execution_count": 12
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"References:\r\n",
+					"https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/tutorial-spark-connector?tabs=python&pivots=programming-language-python#partial-document-update-using-patch\r\n",
+					"\r\n",
+					"https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/cosmos/azure-cosmos-spark_3_2-12/docs/configuration-reference.md"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"##### Creating a Spark Table"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"create table sample_table using cosmos.olap options (\r\n",
+					"    spark.synapse.linkedService 'CosmosDbNoSql1',\r\n",
+					"    spark.cosmos.container 'StoreDemoGraphics',\r\n",
+					"    spark.cosmos.autoSchemaMerge 'true'\r\n",
+					")"
+				],
+				"execution_count": 17
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"drop table if exists sample_table"
+				],
+				"execution_count": 16
 			},
 			{
 				"cell_type": "code",
