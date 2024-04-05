@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "e71b29d2-0280-4588-9f47-d1f7d322da9e"
+				"spark.autotune.trackingId": "03976ba2-c58b-4a0d-9c0e-db8b1f4c6099"
 			}
 		},
 		"metadata": {
@@ -57,7 +57,7 @@
 					"    header=True, inferSchema=True\r\n",
 					"))"
 				],
-				"execution_count": 2
+				"execution_count": 4
 			},
 			{
 				"cell_type": "markdown",
@@ -92,7 +92,78 @@
 					"    header=True, inferSchema=True\r\n",
 					"))"
 				],
-				"execution_count": 3
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"display(dfStoreDemoGraphics)"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"##### Writing Spark Dataframe to Cosmos DB container"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"dfStoreDemoGraphics.write.format(\"cosmos.oltp\") \\\r\n",
+					".option(\"spark.synapse.linkedService\", \"CosmosDbNoSql1\")\\\r\n",
+					".option(\"spark.cosmos.container\", \"StoreDemoGraphics\")\\\r\n",
+					".option(\"spark.cosmos.write.upsert\", \"true\").mode(\"append\").save()"
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
+				],
+				"execution_count": null
 			}
 		]
 	}
