@@ -1245,7 +1245,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "1baa881f-64e6-4b19-aa7b-cef87729f757"
+						"spark.autotune.trackingId": "491c6b58-a893-4ac6-90b5-161c601c44c6"
 					}
 				},
 				"metadata": {
@@ -1270,15 +1270,13 @@
 						"sparkVersion": "3.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"# Loading Cosmos DB data to a Spark DataFrame without impacting the transactional store\r\n",
 							"df = spark.read.format(\"cosmos.olap\")\\\r\n",
@@ -1356,7 +1354,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "35fe9131-c39b-4d0f-bfe2-ba94ee0a26c4"
+						"spark.autotune.trackingId": "7a13643f-b959-4b65-a59e-e73f509fccfd"
 					}
 				},
 				"metadata": {
@@ -1614,25 +1612,6 @@
 						],
 						"outputs": [],
 						"execution_count": 28
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							""
-						],
-						"outputs": [],
-						"execution_count": null
 					}
 				]
 			},
