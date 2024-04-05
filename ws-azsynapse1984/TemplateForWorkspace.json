@@ -1245,7 +1245,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "491c6b58-a893-4ac6-90b5-161c601c44c6"
+						"spark.autotune.trackingId": "462903e3-50ec-4025-8593-d5cfc72cd7ea"
 					}
 				},
 				"metadata": {
@@ -1270,13 +1270,15 @@
 						"sparkVersion": "3.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56
+						"memory": 56,
+						"automaticScaleJobs": false
 					},
 					"sessionKeepAliveTimeout": 30
 				},
 				"cells": [
 					{
 						"cell_type": "code",
+						"metadata": {},
 						"source": [
 							"# Loading Cosmos DB data to a Spark DataFrame without impacting the transactional store\r\n",
 							"df = spark.read.format(\"cosmos.olap\")\\\r\n",
@@ -1354,7 +1356,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "4f68a116-3881-4277-a931-33fa348e920a"
+						"spark.autotune.trackingId": "7d58747f-5d97-4343-b6c8-8a382df5a7a3"
 					}
 				},
 				"metadata": {
@@ -1396,7 +1398,7 @@
 							"))"
 						],
 						"outputs": [],
-						"execution_count": 4
+						"execution_count": 20
 					},
 					{
 						"cell_type": "markdown",
@@ -1432,7 +1434,7 @@
 							"))"
 						],
 						"outputs": [],
-						"execution_count": 5
+						"execution_count": 21
 					},
 					{
 						"cell_type": "code",
@@ -1452,7 +1454,7 @@
 							"display(dfStoreDemoGraphics)"
 						],
 						"outputs": [],
-						"execution_count": 6
+						"execution_count": 22
 					},
 					{
 						"cell_type": "markdown",
@@ -1488,7 +1490,7 @@
 							".option(\"spark.cosmos.write.bulk.enabled\", \"true\").mode(\"append\").save()"
 						],
 						"outputs": [],
-						"execution_count": 10
+						"execution_count": 23
 					},
 					{
 						"cell_type": "code",
@@ -1510,7 +1512,7 @@
 							".option(\"spark.cosmos.container\", \"StoreDemoGraphics\").load()"
 						],
 						"outputs": [],
-						"execution_count": 11
+						"execution_count": 24
 					},
 					{
 						"cell_type": "code",
@@ -1530,7 +1532,7 @@
 							"display(df)"
 						],
 						"outputs": [],
-						"execution_count": 12
+						"execution_count": 25
 					},
 					{
 						"cell_type": "markdown",
