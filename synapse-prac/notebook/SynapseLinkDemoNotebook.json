@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "4cc04e2e-fee1-4284-85ce-0c90b1a8bdf5"
+				"spark.autotune.trackingId": "b53b63cd-059b-4c82-81bc-cf27e359c95d"
 			}
 		},
 		"metadata": {
@@ -48,6 +48,19 @@
 			"sessionKeepAliveTimeout": 30
 		},
 		"cells": [
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"### Working with \"StoreDemoGraphics\" sample file"
+				]
+			},
 			{
 				"cell_type": "code",
 				"source": [
@@ -242,7 +255,7 @@
 					"    spark.cosmos.autoSchemaMerge 'true'\r\n",
 					")"
 				],
-				"execution_count": 29
+				"execution_count": 37
 			},
 			{
 				"cell_type": "code",
@@ -263,9 +276,102 @@
 				},
 				"source": [
 					"%%sql\r\n",
-					"drop table if exists sample_table"
+					"select * from sample_table"
 				],
-				"execution_count": 28
+				"execution_count": 38
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"### Working with \"Products\" sample file"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Reading data from storage account and primary container\r\n",
+					"dfProducts = (spark.read.csv(\r\n",
+					"    \"/demosynapselink-ch05/Products.csv\", header=True, inferSchema=True\r\n",
+					"))"
+				],
+				"execution_count": 41
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"display(dfProducts)"
+				],
+				"execution_count": 42
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Writing data to cosmos DB container\r\n",
+					"dfProducts.write.format(\"cosmos.oltp\")\\\r\n",
+					".option(\"spark.synapse.linkedService\", \"CosmosDbNoSql1\")\\\r\n",
+					".option(\"spark.cosmos.container\", \"Products\")\\\r\n",
+					".option(\"spark.cosmos.write.bulk.enabled\", \"true\").mode(\"append\").save()"
+				],
+				"execution_count": 43
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
+				],
+				"execution_count": null
 			}
 		]
 	}
