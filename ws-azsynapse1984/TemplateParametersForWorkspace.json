@@ -14,6 +14,9 @@
 		"ls_adls_to_synapse_src_accountKey": {
 			"value": ""
 		},
+		"ls_az_blob_storage_acct_connectionString": {
+			"value": ""
+		},
 		"ws-azsynapse1984-WorkspaceDefaultSqlServer_connectionString": {
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:ws-azsynapse1984.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
 		},
