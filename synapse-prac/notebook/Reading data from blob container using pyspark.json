@@ -1,5 +1,5 @@
 {
-	"name": "Reading data from blob container using SAS token",
+	"name": "Reading data from blob container using pyspark",
 	"properties": {
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "a3b0769f-a56d-4339-8c27-6e3723733db4"
+				"spark.autotune.trackingId": "adb4a1db-e9f3-42db-bd43-e35e85087ac9"
 			}
 		},
 		"metadata": {
@@ -58,7 +58,7 @@
 					}
 				},
 				"source": [
-					"Reading data from Azure Data Lake Storage Gen2 using Python"
+					"#### Reading data from Azure Data Lake Storage Gen2 using Python"
 				]
 			},
 			{
@@ -75,7 +75,8 @@
 					},
 					"microsoft": {
 						"language": "python"
-					}
+					},
+					"collapsed": false
 				},
 				"source": [
 					"%%pyspark\r\n",
@@ -99,7 +100,50 @@
 					"\r\n",
 					"display(df.limit(10))"
 				],
-				"execution_count": 3
+				"execution_count": 9
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"from pyspark.sql import SparkSession\r\n",
+					"from pyspark.sql.types import *\r\n",
+					"account_name = \"myblobnaccount1984sa\"\r\n",
+					"container_name = \"raw\"\r\n",
+					"blob_path = f'wasbs://{container_name}@{account_name}.blob.core.windows.net'\r\n",
+					"df1 = spark.read.option(\"header\",\"true\").csv(blob_path + '/countries.csv')\r\n",
+					"display(df1.limit(10))"
+				],
+				"execution_count": 26
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"Next, we will save the DataFrame in Resilient Distributed Dataset (RDD) format. RDD is a collection of elements partitioned across the nodes of the cluster that can be operated on in parallel.\r\n",
+					"We can run the following code snippet to save your data in RDD form in your Spark pool:"
+				]
 			},
 			{
 				"cell_type": "code",
@@ -119,11 +163,247 @@
 				},
 				"source": [
 					"%%pyspark\r\n",
-					"from pyspark.sql import SparkSession\r\n",
-					"from pyspark.sql.types import *\r\n",
-					"account_name = \"myblobnaccount1984sa\"\r\n",
-					"container_name = \"raw\"\r\n",
-					"blob_sas_token"
+					"countries_RDD = df.rdd\r\n",
+					"type(countries_RDD)"
+				],
+				"execution_count": 27
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"Once our data is saved in the RDD form in Spark, we have the option to save the data \r\n",
+					"in any format as per your business requirements. In the following code snippet, first we \r\n",
+					"will define the target path and where we want to store the data in text format. You can also \r\n",
+					"create variables to define the file path instead of hardcoding the value in the code:"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"text_path = blob_path + \"/countriestext.txt\"\r\n",
+					"countries_RDD.saveAsTextFile(text_path)"
+				],
+				"execution_count": 30
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"df.write.csv(blob_path + '/countries_csv.csv', mode = 'overwrite', header = 'true')"
+				],
+				"execution_count": 31
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"You can also save your RDD in different formats. The following code block can be used to save RDD in Parquet, JSON, or CSV files"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"parquet_path = blob_path + 'austin_parquet.parquet'\r\n",
+					"json_path = blob_path + 'austin_json.json'\r\n",
+					"csv_path = blob_path + 'austin_csv.csv'"
+				],
+				"execution_count": 32
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"So now, our data is residing in a file saved on your Data Lake Gen2 storage account. \r\n",
+					"You can read this data for further explorations or data visualizations. Instead of creating \r\n",
+					"a DataFrame, we can also choose to create a managed Spark table in Azure Synapse \r\n",
+					"Analytics."
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"#### Creating a managed Spark table"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"There are primarily two types of Spark tables – external and managed. A Spark SQL table for which Spark \r\n",
+					"manages both the data and the metadata is known as a Spark managed table. The following code block will create a Spark table in a Synapse workspace:"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"spark.sql(\"CREATE TABLE cities  (name STRING, population INT) USING PARQUET\")"
+				],
+				"execution_count": 33
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"The following script can be used to ingest the records in this table:"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"spark.sql(\"INSERT INTO cities VALUES (\\'Seattle\\', 730400), (\\'San Francisco\\', 881549), (\\'Beijing\\', 21540000), (\\'Bangalore\\', 10540000)\")"
+				],
+				"execution_count": 39
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"display(spark.sql(\"SELECT * FROM cities ORDER BY name\"))"
+				],
+				"execution_count": 41
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
 				],
 				"execution_count": null
 			}
