@@ -17,6 +17,9 @@
 		"ws-azsynapse1984-WorkspaceDefaultSqlServer_connectionString": {
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:ws-azsynapse1984.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
 		},
+		"bing-covid-19-data_sasUri": {
+			"value": ""
+		},
 		"ls_adls_to_synapse_src_properties_typeProperties_url": {
 			"value": "https://authenticomvindetailsdl.dfs.core.windows.net/"
 		},
