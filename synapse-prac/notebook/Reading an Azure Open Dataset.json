@@ -1,5 +1,5 @@
 {
-	"name": "Notebook 2",
+	"name": "Reading an Azure Open Dataset",
 	"properties": {
 		"nbformat": 4,
 		"nbformat_minor": 2,
@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "b673350b-4bf8-456f-9277-a92d271e3e1c"
+				"spark.autotune.trackingId": "a6c23836-7ce6-444a-ab12-f8081679f6f8"
 			}
 		},
 		"metadata": {
