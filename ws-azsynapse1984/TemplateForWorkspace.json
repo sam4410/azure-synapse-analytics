@@ -1426,15 +1426,15 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "4bec4ac9-05c0-4923-8c50-0c18ba618408"
+						"spark.autotune.trackingId": "d808911e-9e09-4bd2-bdac-08cfad5d7317"
 					}
 				},
 				"metadata": {
 					"saveOutput": true,
 					"enableDebugMode": false,
 					"kernelspec": {
-						"name": "synapse_spark",
-						"display_name": "scala"
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
 					},
 					"language_info": {
 						"name": "scala"
@@ -1510,7 +1510,7 @@
 							"display(df.limit(10))"
 						],
 						"outputs": [],
-						"execution_count": 9
+						"execution_count": 1
 					},
 					{
 						"cell_type": "code",
@@ -1540,7 +1540,7 @@
 							"display(df1.limit(10))"
 						],
 						"outputs": [],
-						"execution_count": 26
+						"execution_count": 5
 					},
 					{
 						"cell_type": "markdown",
@@ -1578,7 +1578,7 @@
 							"type(countries_RDD)"
 						],
 						"outputs": [],
-						"execution_count": 27
+						"execution_count": 6
 					},
 					{
 						"cell_type": "markdown",
@@ -1618,7 +1618,7 @@
 							"countries_RDD.saveAsTextFile(text_path)"
 						],
 						"outputs": [],
-						"execution_count": 30
+						"execution_count": 7
 					},
 					{
 						"cell_type": "code",
@@ -1641,7 +1641,7 @@
 							"df.write.csv(blob_path + '/countries_csv.csv', mode = 'overwrite', header = 'true')"
 						],
 						"outputs": [],
-						"execution_count": 31
+						"execution_count": 8
 					},
 					{
 						"cell_type": "markdown",
@@ -1679,7 +1679,7 @@
 							"csv_path = blob_path + 'austin_csv.csv'"
 						],
 						"outputs": [],
-						"execution_count": 32
+						"execution_count": 9
 					},
 					{
 						"cell_type": "markdown",
@@ -1742,10 +1742,11 @@
 						},
 						"source": [
 							"%%pyspark\r\n",
+							"spark.sql(\"DROP TABLE IF EXISTS cities\")\r\n",
 							"spark.sql(\"CREATE TABLE cities  (name STRING, population INT) USING PARQUET\")"
 						],
 						"outputs": [],
-						"execution_count": 33
+						"execution_count": 10
 					},
 					{
 						"cell_type": "markdown",
@@ -1781,7 +1782,7 @@
 							"spark.sql(\"INSERT INTO cities VALUES (\\'Seattle\\', 730400), (\\'San Francisco\\', 881549), (\\'Beijing\\', 21540000), (\\'Bangalore\\', 10540000)\")"
 						],
 						"outputs": [],
-						"execution_count": 39
+						"execution_count": 12
 					},
 					{
 						"cell_type": "code",
@@ -1805,7 +1806,7 @@
 							"display(spark.sql(\"SELECT * FROM cities ORDER BY name\"))"
 						],
 						"outputs": [],
-						"execution_count": 41
+						"execution_count": 13
 					},
 					{
 						"cell_type": "code",
