@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "b43a9f5a-308a-4b05-a450-2b2f20736d9c"
+				"spark.autotune.trackingId": "9cd143a4-59a9-40b0-8a76-4e6b16e56cd9"
 			}
 		},
 		"metadata": {
@@ -140,6 +140,21 @@
 				"execution_count": 20
 			},
 			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"We need to provide values for the storage account name, container name, and relative \r\n",
+					"path in the following code snippet to retrieve the path of your Azure Data Lake Storage \r\n",
+					"Gen2 account where we would like to save our files"
+				]
+			},
+			{
 				"cell_type": "code",
 				"metadata": {
 					"jupyter": {
@@ -153,7 +168,21 @@
 					}
 				},
 				"source": [
-					""
+					"// set your storage account connection\r\n",
+					"val account_name = \"myadlsaccount1984sa\"\r\n",
+					"val container_name = \"bronze\"\r\n",
+					"val relative_path = \"\"\r\n",
+					"val adls_path = f\"abfss://$container_name@$account_name.dfs.core.windows.net/$relative_path\"\r\n",
+					"\r\n",
+					"import org.apache.spark.sql.SaveMode\r\n",
+					"// set the path for the output file\r\n",
+					"val parquet_path = adls_path + \"holiday.parquet\"\r\n",
+					"val json_path = adls_path + \"holiday.json\"\r\n",
+					"val csv_path = adls_path + \"holiday.csv\"\r\n",
+					"hol_df.write.mode(SaveMode.Overwrite).parquet(parquet_path)\r\n",
+					"hol_df.write.mode(SaveMode.Overwrite).json(json_path)\r\n",
+					"hol_df.write.mode(SaveMode.Overwrite).option(\"header\", \"true\").\r\n",
+					"csv(csv_path)"
 				],
 				"execution_count": null
 			}
