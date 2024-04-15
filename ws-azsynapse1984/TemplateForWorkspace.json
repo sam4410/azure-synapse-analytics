@@ -656,6 +656,20 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/ws_powerBI_Covid_reporting')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "PowerBIWorkspace",
+				"typeProperties": {
+					"workspaceID": "eea01709-1acb-495f-b05b-218f70e93df9",
+					"tenantID": "2918ecfd-90a0-4f02-a2a9-ce18aff25489"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/tr_pl_adlsgen2_to_synapse')]",
 			"type": "Microsoft.Synapse/workspaces/triggers",
 			"apiVersion": "2019-06-01-preview",
@@ -832,6 +846,316 @@
 					"resultLimit": 5000
 				},
 				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Azure Spark SQL')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "sparkpoolprac84",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "f2256d44-b5ae-4462-899a-ca8c3991f6c1"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "sql"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/acdf152f-3867-4db8-9da5-81dfde654c21/resourceGroups/rg-dev-revenue-practice/providers/Microsoft.Synapse/workspaces/ws-azsynapse1984/bigDataPools/sparkpoolprac84",
+						"name": "sparkpoolprac84",
+						"type": "Spark",
+						"endpoint": "https://ws-azsynapse1984.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpoolprac84",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.4",
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"The Spark SQL syntax is similar to T-SQL; hence, you will not have difficulty in using this \r\n",
+							"as your primary language. However, keep in mind that Spark SQL does not support all the \r\n",
+							"features available in T-SQL.\r\n",
+							"\r\n",
+							"The following script will create a managed table from Spark. The table is created in the \r\n",
+							"Synapse warehouse folder in your primary storage account. The table will be synchronized \r\n",
+							"and available in Synapse SQL pools."
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"drop table if exists cities"
+						],
+						"outputs": [],
+						"execution_count": 32
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"CREATE TABLE cities\r\n",
+							"  (name STRING, population INT)\r\n",
+							"  USING PARQUET"
+						],
+						"outputs": [],
+						"execution_count": 33
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"INSERT INTO cities VALUES ('Seattle', 730400), \r\n",
+							"('San Francisco', 881549), ('Beijing', 21540000), \r\n",
+							"('Bangalore', 10540000)"
+						],
+						"outputs": [],
+						"execution_count": 34
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"When you run any script in Spark SQL, you can see the Spark job running in the output \r\n",
+							"window. Once the job is complete, the Status field will be updated to Succeeded.\r\n",
+							"\r\n",
+							"Next, you can perform the SELECT operation on this table to validate whether the data \r\n",
+							"has been inserted"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"SELECT * FROM cities\r\n",
+							"ORDER BY name"
+						],
+						"outputs": [],
+						"execution_count": 35
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"##### Creating an unmanaged Spark table"
+						]
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"An unmanaged Spark table is also known as an external table. You can create external \r\n",
+							"tables from Spark by using Spark SQL. We need to provide a value for the LOCATION\r\n",
+							"parameter, which defines the path where the Spark table must be created."
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"drop table if exists cities"
+						],
+						"outputs": [],
+						"execution_count": 37
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"CREATE TABLE cities\r\n",
+							"  (name STRING, population INT)\r\n",
+							"  USING PARQUET\r\n",
+							"  LOCATION '/datalake/cities'\r\n",
+							"  OPTIONS ('compression'='snappy')"
+						],
+						"outputs": [],
+						"execution_count": 38
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"INSERT INTO cities VALUES ('Seattle', 730400), \r\n",
+							"('San Francisco', 881549), ('Beijing', 21540000), \r\n",
+							"('Bangalore', 10540000)"
+						],
+						"outputs": [],
+						"execution_count": 39
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"SELECT * FROM cities\r\n",
+							"ORDER BY name"
+						],
+						"outputs": [],
+						"execution_count": 40
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							""
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
 			},
 			"dependsOn": []
 		},
@@ -1426,7 +1750,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "65991558-87c4-4bfd-8c9e-8255a6841fa4"
+						"spark.autotune.trackingId": "555a6b0a-6a88-4997-8509-0aa6e2f8da9f"
 					}
 				},
 				"metadata": {
@@ -1451,8 +1775,7 @@
 						"sparkVersion": "3.4",
 						"nodeCount": 3,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -1823,6 +2146,204 @@
 						},
 						"source": [
 							""
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Reading data from blob container using scala')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "sparkpoolprac84",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "9cd143a4-59a9-40b0-8a76-4e6b16e56cd9"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "scala"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/acdf152f-3867-4db8-9da5-81dfde654c21/resourceGroups/rg-dev-revenue-practice/providers/Microsoft.Synapse/workspaces/ws-azsynapse1984/bigDataPools/sparkpoolprac84",
+						"name": "sparkpoolprac84",
+						"type": "Spark",
+						"endpoint": "https://ws-azsynapse1984.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpoolprac84",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.4",
+						"nodeCount": 3,
+						"cores": 8,
+						"memory": 56
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"Data stored in an Azure Data Lake Storage Gen2 account can also be read using Scala, \r\n",
+							"similar to a Python application. In this case, too, we require a storage account name, a blob container name, and a blob relative path, along with an SAS key to access the data"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"// set blob storage account connection for open dataset\r\n",
+							"val hol_blob_account_name = \"myblobnaccount1984sa\"\r\n",
+							"val hol_blob_container_name = \"raw\"\r\n",
+							"val hol_blob_relative_path = \"\"\r\n",
+							"val hol_blob_sas_token = \"sv=2022-11-02&ss=bfqt&srt=c&sp=rwdlacupiytfx&se=2024-04-30T17:47:19Z&st=2024-04-15T09:47:19Z&spr=https&sig=na7V2ny1MKE2RQXFLvU0V4kdzcZqVTtx06tYDnsy1Cw%3D\""
+						],
+						"outputs": [],
+						"execution_count": 8
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"val hol_wasbs_path = f\"wasbs://$hol_blob_container_name@$hol_blob_account_name.blob.core.windows.net\""
+						],
+						"outputs": [],
+						"execution_count": 18
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"spark.conf.set(f\"fs.azure.sas.$hol_blob_container_name.$hol_blob_account_name.blob.core.windows.net\",hol_blob_sas_token)"
+						],
+						"outputs": [],
+						"execution_count": 19
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"val hol_df = spark.read.parquet(hol_wasbs_path + \"part-00000-5e3cdfe5-7c29-4650-b3c7-234e6ac397f2-c000.snappy.parquet\") \r\n",
+							"hol_df.show(5, truncate = false)"
+						],
+						"outputs": [],
+						"execution_count": 20
+					},
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"We need to provide values for the storage account name, container name, and relative \r\n",
+							"path in the following code snippet to retrieve the path of your Azure Data Lake Storage \r\n",
+							"Gen2 account where we would like to save our files"
+						]
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"// set your storage account connection\r\n",
+							"val account_name = \"myadlsaccount1984sa\"\r\n",
+							"val container_name = \"bronze\"\r\n",
+							"val relative_path = \"\"\r\n",
+							"val adls_path = f\"abfss://$container_name@$account_name.dfs.core.windows.net/$relative_path\"\r\n",
+							"\r\n",
+							"import org.apache.spark.sql.SaveMode\r\n",
+							"// set the path for the output file\r\n",
+							"val parquet_path = adls_path + \"holiday.parquet\"\r\n",
+							"val json_path = adls_path + \"holiday.json\"\r\n",
+							"val csv_path = adls_path + \"holiday.csv\"\r\n",
+							"hol_df.write.mode(SaveMode.Overwrite).parquet(parquet_path)\r\n",
+							"hol_df.write.mode(SaveMode.Overwrite).json(json_path)\r\n",
+							"hol_df.write.mode(SaveMode.Overwrite).option(\"header\", \"true\").\r\n",
+							"csv(csv_path)"
 						],
 						"outputs": [],
 						"execution_count": null
@@ -2523,516 +3044,6 @@
 			},
 			"dependsOn": [],
 			"location": "eastus2"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Reading data from blob container using scala')]",
-			"type": "Microsoft.Synapse/workspaces/notebooks",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"nbformat": 4,
-				"nbformat_minor": 2,
-				"bigDataPool": {
-					"referenceName": "sparkpoolprac84",
-					"type": "BigDataPoolReference"
-				},
-				"sessionProperties": {
-					"driverMemory": "56g",
-					"driverCores": 8,
-					"executorMemory": "56g",
-					"executorCores": 8,
-					"numExecutors": 2,
-					"conf": {
-						"spark.dynamicAllocation.enabled": "false",
-						"spark.dynamicAllocation.minExecutors": "2",
-						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "afab6d0a-0523-41ff-bf73-7bc023348461"
-					}
-				},
-				"metadata": {
-					"saveOutput": true,
-					"enableDebugMode": false,
-					"kernelspec": {
-						"name": "synapse_pyspark",
-						"display_name": "Synapse PySpark"
-					},
-					"language_info": {
-						"name": "scala"
-					},
-					"a365ComputeOptions": {
-						"id": "/subscriptions/acdf152f-3867-4db8-9da5-81dfde654c21/resourceGroups/rg-dev-revenue-practice/providers/Microsoft.Synapse/workspaces/ws-azsynapse1984/bigDataPools/sparkpoolprac84",
-						"name": "sparkpoolprac84",
-						"type": "Spark",
-						"endpoint": "https://ws-azsynapse1984.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpoolprac84",
-						"auth": {
-							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net"
-						},
-						"sparkVersion": "3.4",
-						"nodeCount": 3,
-						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
-					},
-					"sessionKeepAliveTimeout": 30
-				},
-				"cells": [
-					{
-						"cell_type": "markdown",
-						"metadata": {
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"Data stored in an Azure Data Lake Storage Gen2 account can also be read using Scala, \r\n",
-							"similar to a Python application. In this case, too, we require a storage account name, a blob container name, and a blob relative path, along with an SAS key to access the data"
-						]
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"// set blob storage account connection for open dataset\r\n",
-							"val hol_blob_account_name = \"myblobnaccount1984sa\"\r\n",
-							"val hol_blob_container_name = \"raw\"\r\n",
-							"val hol_blob_relative_path = \"\"\r\n",
-							"val hol_blob_sas_token = \"sv=2022-11-02&ss=bfqt&srt=c&sp=rwdlacupiytfx&se=2024-04-30T17:47:19Z&st=2024-04-15T09:47:19Z&spr=https&sig=na7V2ny1MKE2RQXFLvU0V4kdzcZqVTtx06tYDnsy1Cw%3D\""
-						],
-						"outputs": [],
-						"execution_count": 8
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"val hol_wasbs_path = f\"wasbs://$hol_blob_container_name@$hol_blob_account_name.blob.core.windows.net\""
-						],
-						"outputs": [],
-						"execution_count": 18
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"spark.conf.set(f\"fs.azure.sas.$hol_blob_container_name.$hol_blob_account_name.blob.core.windows.net\",hol_blob_sas_token)"
-						],
-						"outputs": [],
-						"execution_count": 19
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"val hol_df = spark.read.parquet(hol_wasbs_path + \"part-00000-5e3cdfe5-7c29-4650-b3c7-234e6ac397f2-c000.snappy.parquet\") \r\n",
-							"hol_df.show(5, truncate = false)"
-						],
-						"outputs": [],
-						"execution_count": 20
-					},
-					{
-						"cell_type": "markdown",
-						"metadata": {
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"We need to provide values for the storage account name, container name, and relative \r\n",
-							"path in the following code snippet to retrieve the path of your Azure Data Lake Storage \r\n",
-							"Gen2 account where we would like to save our files"
-						]
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"// set your storage account connection\r\n",
-							"val account_name = \"myadlsaccount1984sa\"\r\n",
-							"val container_name = \"bronze\"\r\n",
-							"val relative_path = \"\"\r\n",
-							"val adls_path = f\"abfss://$container_name@$account_name.dfs.core.windows.net/$relative_path\"\r\n",
-							"\r\n",
-							"import org.apache.spark.sql.SaveMode\r\n",
-							"// set the path for the output file\r\n",
-							"val parquet_path = adls_path + \"holiday.parquet\"\r\n",
-							"val json_path = adls_path + \"holiday.json\"\r\n",
-							"val csv_path = adls_path + \"holiday.csv\"\r\n",
-							"hol_df.write.mode(SaveMode.Overwrite).parquet(parquet_path)\r\n",
-							"hol_df.write.mode(SaveMode.Overwrite).json(json_path)\r\n",
-							"hol_df.write.mode(SaveMode.Overwrite).option(\"header\", \"true\").\r\n",
-							"csv(csv_path)"
-						],
-						"outputs": [],
-						"execution_count": null
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Azure Spark SQL')]",
-			"type": "Microsoft.Synapse/workspaces/notebooks",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"nbformat": 4,
-				"nbformat_minor": 2,
-				"bigDataPool": {
-					"referenceName": "sparkpoolprac84",
-					"type": "BigDataPoolReference"
-				},
-				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
-					"numExecutors": 2,
-					"conf": {
-						"spark.dynamicAllocation.enabled": "false",
-						"spark.dynamicAllocation.minExecutors": "2",
-						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "025fb44d-49d1-47ec-921f-7e131ec0dee1"
-					}
-				},
-				"metadata": {
-					"saveOutput": true,
-					"enableDebugMode": false,
-					"kernelspec": {
-						"name": "synapse_pyspark",
-						"display_name": "Synapse PySpark"
-					},
-					"language_info": {
-						"name": "sql"
-					},
-					"a365ComputeOptions": {
-						"id": "/subscriptions/acdf152f-3867-4db8-9da5-81dfde654c21/resourceGroups/rg-dev-revenue-practice/providers/Microsoft.Synapse/workspaces/ws-azsynapse1984/bigDataPools/sparkpoolprac84",
-						"name": "sparkpoolprac84",
-						"type": "Spark",
-						"endpoint": "https://ws-azsynapse1984.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpoolprac84",
-						"auth": {
-							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net"
-						},
-						"sparkVersion": "3.4",
-						"nodeCount": 3,
-						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
-					},
-					"sessionKeepAliveTimeout": 30
-				},
-				"cells": [
-					{
-						"cell_type": "markdown",
-						"metadata": {
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"The Spark SQL syntax is similar to T-SQL; hence, you will not have difficulty in using this \r\n",
-							"as your primary language. However, keep in mind that Spark SQL does not support all the \r\n",
-							"features available in T-SQL.\r\n",
-							"\r\n",
-							"The following script will create a managed table from Spark. The table is created in the \r\n",
-							"Synapse warehouse folder in your primary storage account. The table will be synchronized \r\n",
-							"and available in Synapse SQL pools."
-						]
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": false
-						},
-						"source": [
-							"drop table if exists cities"
-						],
-						"outputs": [],
-						"execution_count": 32
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": false
-						},
-						"source": [
-							"CREATE TABLE cities\r\n",
-							"  (name STRING, population INT)\r\n",
-							"  USING PARQUET"
-						],
-						"outputs": [],
-						"execution_count": 33
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": false
-						},
-						"source": [
-							"INSERT INTO cities VALUES ('Seattle', 730400), \r\n",
-							"('San Francisco', 881549), ('Beijing', 21540000), \r\n",
-							"('Bangalore', 10540000)"
-						],
-						"outputs": [],
-						"execution_count": 34
-					},
-					{
-						"cell_type": "markdown",
-						"metadata": {
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"When you run any script in Spark SQL, you can see the Spark job running in the output \r\n",
-							"window. Once the job is complete, the Status field will be updated to Succeeded.\r\n",
-							"\r\n",
-							"Next, you can perform the SELECT operation on this table to validate whether the data \r\n",
-							"has been inserted"
-						]
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": false
-						},
-						"source": [
-							"SELECT * FROM cities\r\n",
-							"ORDER BY name"
-						],
-						"outputs": [],
-						"execution_count": 35
-					},
-					{
-						"cell_type": "markdown",
-						"metadata": {
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"##### Creating an unmanaged Spark table"
-						]
-					},
-					{
-						"cell_type": "markdown",
-						"metadata": {
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"An unmanaged Spark table is also known as an external table. You can create external \r\n",
-							"tables from Spark by using Spark SQL. We need to provide a value for the LOCATION\r\n",
-							"parameter, which defines the path where the Spark table must be created."
-						]
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": false
-						},
-						"source": [
-							"drop table if exists cities"
-						],
-						"outputs": [],
-						"execution_count": 37
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": false
-						},
-						"source": [
-							"CREATE TABLE cities\r\n",
-							"  (name STRING, population INT)\r\n",
-							"  USING PARQUET\r\n",
-							"  LOCATION '/datalake/cities'\r\n",
-							"  OPTIONS ('compression'='snappy')"
-						],
-						"outputs": [],
-						"execution_count": 38
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": false
-						},
-						"source": [
-							"INSERT INTO cities VALUES ('Seattle', 730400), \r\n",
-							"('San Francisco', 881549), ('Beijing', 21540000), \r\n",
-							"('Bangalore', 10540000)"
-						],
-						"outputs": [],
-						"execution_count": 39
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"collapsed": false
-						},
-						"source": [
-							"SELECT * FROM cities\r\n",
-							"ORDER BY name"
-						],
-						"outputs": [],
-						"execution_count": 40
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							""
-						],
-						"outputs": [],
-						"execution_count": null
-					}
-				]
-			},
-			"dependsOn": []
 		}
 	]
 }
