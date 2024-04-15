@@ -1,0 +1,11 @@
+{
+	"name": "ws_powerBI_Covid_reporting",
+	"properties": {
+		"annotations": [],
+		"type": "PowerBIWorkspace",
+		"typeProperties": {
+			"workspaceID": "eea01709-1acb-495f-b05b-218f70e93df9",
+			"tenantID": "2918ecfd-90a0-4f02-a2a9-ce18aff25489"
+		}
+	}
+}
