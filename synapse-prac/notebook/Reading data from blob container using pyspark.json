@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "adb4a1db-e9f3-42db-bd43-e35e85087ac9"
+				"spark.autotune.trackingId": "00a14e44-354e-44a4-85b9-b601a3887ed7"
 			}
 		},
 		"metadata": {
@@ -100,7 +100,7 @@
 					"\r\n",
 					"display(df.limit(10))"
 				],
-				"execution_count": 9
+				"execution_count": 1
 			},
 			{
 				"cell_type": "code",
@@ -129,7 +129,7 @@
 					"df1 = spark.read.option(\"header\",\"true\").csv(blob_path + '/countries.csv')\r\n",
 					"display(df1.limit(10))"
 				],
-				"execution_count": 26
+				"execution_count": 5
 			},
 			{
 				"cell_type": "markdown",
@@ -166,7 +166,7 @@
 					"countries_RDD = df.rdd\r\n",
 					"type(countries_RDD)"
 				],
-				"execution_count": 27
+				"execution_count": 6
 			},
 			{
 				"cell_type": "markdown",
@@ -205,7 +205,7 @@
 					"text_path = blob_path + \"/countriestext.txt\"\r\n",
 					"countries_RDD.saveAsTextFile(text_path)"
 				],
-				"execution_count": 30
+				"execution_count": 7
 			},
 			{
 				"cell_type": "code",
@@ -227,7 +227,7 @@
 					"%%pyspark\r\n",
 					"df.write.csv(blob_path + '/countries_csv.csv', mode = 'overwrite', header = 'true')"
 				],
-				"execution_count": 31
+				"execution_count": 8
 			},
 			{
 				"cell_type": "markdown",
@@ -264,7 +264,7 @@
 					"json_path = blob_path + 'austin_json.json'\r\n",
 					"csv_path = blob_path + 'austin_csv.csv'"
 				],
-				"execution_count": 32
+				"execution_count": 9
 			},
 			{
 				"cell_type": "markdown",
@@ -327,9 +327,10 @@
 				},
 				"source": [
 					"%%pyspark\r\n",
+					"spark.sql(\"DROP TABLE IF EXISTS cities\")\r\n",
 					"spark.sql(\"CREATE TABLE cities  (name STRING, population INT) USING PARQUET\")"
 				],
-				"execution_count": 33
+				"execution_count": 10
 			},
 			{
 				"cell_type": "markdown",
@@ -364,7 +365,7 @@
 					"%%pyspark\r\n",
 					"spark.sql(\"INSERT INTO cities VALUES (\\'Seattle\\', 730400), (\\'San Francisco\\', 881549), (\\'Beijing\\', 21540000), (\\'Bangalore\\', 10540000)\")"
 				],
-				"execution_count": 39
+				"execution_count": 12
 			},
 			{
 				"cell_type": "code",
@@ -387,7 +388,7 @@
 					"%%pyspark\r\n",
 					"display(spark.sql(\"SELECT * FROM cities ORDER BY name\"))"
 				],
-				"execution_count": 41
+				"execution_count": 13
 			},
 			{
 				"cell_type": "code",
