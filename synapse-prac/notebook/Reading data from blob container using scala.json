@@ -1,0 +1,162 @@
+{
+	"name": "Reading data from blob container using scala",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sparkpoolprac84",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "b43a9f5a-308a-4b05-a450-2b2f20736d9c"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "scala"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/acdf152f-3867-4db8-9da5-81dfde654c21/resourceGroups/rg-dev-revenue-practice/providers/Microsoft.Synapse/workspaces/ws-azsynapse1984/bigDataPools/sparkpoolprac84",
+				"name": "sparkpoolprac84",
+				"type": "Spark",
+				"endpoint": "https://ws-azsynapse1984.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpoolprac84",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.4",
+				"nodeCount": 3,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"Data stored in an Azure Data Lake Storage Gen2 account can also be read using Scala, \r\n",
+					"similar to a Python application. In this case, too, we require a storage account name, a blob container name, and a blob relative path, along with an SAS key to access the data"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"// set blob storage account connection for open dataset\r\n",
+					"val hol_blob_account_name = \"myblobnaccount1984sa\"\r\n",
+					"val hol_blob_container_name = \"raw\"\r\n",
+					"val hol_blob_relative_path = \"\"\r\n",
+					"val hol_blob_sas_token = \"sv=2022-11-02&ss=bfqt&srt=c&sp=rwdlacupiytfx&se=2024-04-30T17:47:19Z&st=2024-04-15T09:47:19Z&spr=https&sig=na7V2ny1MKE2RQXFLvU0V4kdzcZqVTtx06tYDnsy1Cw%3D\""
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"val hol_wasbs_path = f\"wasbs://$hol_blob_container_name@$hol_blob_account_name.blob.core.windows.net\""
+				],
+				"execution_count": 18
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"spark.conf.set(f\"fs.azure.sas.$hol_blob_container_name.$hol_blob_account_name.blob.core.windows.net\",hol_blob_sas_token)"
+				],
+				"execution_count": 19
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"val hol_df = spark.read.parquet(hol_wasbs_path + \"part-00000-5e3cdfe5-7c29-4650-b3c7-234e6ac397f2-c000.snappy.parquet\") \r\n",
+					"hol_df.show(5, truncate = false)"
+				],
+				"execution_count": 20
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
+				],
+				"execution_count": null
+			}
+		]
+	}
+}
